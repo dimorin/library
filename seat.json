@@ -1,0 +1,7 @@
+{"seats":[
+	{"title":"여자열람실1","startNumber":100, "howmany":10},
+	{"title":"여자열람실2","startNumber":200, "howmany":10},
+	{"title":"남자열람실1","startNumber":300, "howmany":10},
+	{"title":"남자열람실2","startNumber":400, "howmany":10},
+	{"title":"자유열람실","startNumber":500, "howmany":20}
+]}

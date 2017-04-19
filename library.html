@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD Xhtml 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">	
+	<title></title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.0/css/bulma.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+	<style>
+		.hide{display:none;}
+		.show{display:block;}
+	</style>
+	</style>
+	<script  type="text/javascript"  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	
+	<script>
+		var xmlHttp;
+		var load_json;
+		var drag_target, drag_offset_left, drag_offset_top;
+
+		window.onload=function(){
+			$("#btn_load_seat").click(function(){
+				load_json = 'seat.json';
+				startLoadFile(load_json);	
+			});
+			$("#btn_load_member").click(function(){
+				load_json = 'member.json';
+				startLoadFile(load_json);	
+			});
+		}
+		
+		function startLoadFile(file){			
+			xmlHttp = createXMLHTTPObject();// 1. 브라우저에 따른 XMLHttpRequest생성하기.			
+			xmlHttp.onreadystatechange=on_ReadyStateChange;// 2. 요청에 대한 응답처리 이벤트 리스너 등록.			
+			xmlHttp.open("GET", file, true);// 3.서버로 보낼 데이터 생성.	// 4. GET 방식으로 데이터 보내기, 응답은 비동기로 클라이언트<->서버간의 연결 요청준비.			
+			xmlHttp.send(null);// 5. 실제 데이터 전송.
+		}
+		
+		// 1. 브라우저에 따른 XMLHttpRequest생성하기.
+		function createXMLHTTPObject(){
+			var xhr = null;
+			if (window.XMLHttpRequest) {
+				// IE7버전 이상, Chrome, Safari, Firefox, opera등 거의 대부분의 브라우저에서는
+				// XMLHttpRequest객체를 제공합니다.
+				xhr = new XMLHttpRequest();
+			}
+			else {
+				// IE6,IE5 버전에서는 아래와 같이 XMLHttpRequest객체를 생성해야 합니다.
+				xhr = new ActiveXObject("Microsoft.XMLHTTP");
+			}				
+			return xhr;
+		}			
+			
+		// 6.응답처리.
+		function on_ReadyStateChange(){
+			console.log('ready'+load_json+xmlHttp.readyState);
+			// 4=데이터 전송 완료.(0=초기화전,1=로딩중,2=로딩됨,3=대화상태)
+			if(xmlHttp.readyState==4){
+				//200은 에러 없음.(404=페이지가 존재하지 않음)
+				if(xmlHttp.status==200){
+					// 서버에서 받은 값.
+					alert("서버에서 받은 원본 데이터 : "+xmlHttp.responseText);					
+					//7. 데이터 파싱처리.
+					if(load_json == 'seat.json'){
+						createSeats(xmlHttp.responseText);
+					}else if(load_json == 'member.json'){
+						createMember(xmlHttp.responseText);
+					}					
+				}
+				else{
+					alert("처리중 에러가 발생했습니다.");
+				}
+			}
+		}
+		
+		//7.JSON 포멧 데이터 처리.
+		function createSeats(strInfo){
+			//1. JSON 포멧 문자열을 JavaScript Object로 변경시키기.
+			//var objImageInfo = eval("("+strInfo+")"); 
+			objSeatInfo = JSON.parse(strInfo);
+			var seats = objSeatInfo.seats;
+			
+			var strDOM = "";
+			for(var i=0;i<seats.length;i++){
+				//2. N번째 이미지 정보 구하기.
+				var seat =seats[i];
+				
+				var strSeat = "";
+				var j = Number(seat.startNumber);
+				var seat_length = seat.howmany;
+				for(j=0; j<seat_length; j++){
+					var seat_id = (seat.startNumber+j);
+					strSeat += '<div class="seat box is-pulled-left" id=seat'+seat_id+'>';
+					strSeat += '<div class="seat_id">'+seat_id+'</div>';
+					strSeat += '</div>';
+				}
+
+				//3. N번째 이미지 패널 생성하기.			
+				strDOM +='<div class="room box is-clearfix" style="position:relative; display:inline-block;">';
+				strDOM +='	<div class="title" onmousedown="moveRoom(event)" style="background:#ddd; cursor:move;">'+seat.title+'<a href="#" onclick="miniRoom(event)" style="float:right; display:inline-block; width:10px; height:10px; background:#aaa;"></a></div>';
+				strDOM +='	<div class="seat_container show">'+strSeat+'</div>';
+				strDOM +='  <div class="resize" onmousedown="resizeRoom(event)" style="position:absolute; bottom:0; right:0; display:inline-block; width:20px; height:20px; background:#ddd; cursor: se-resize;"></div>';
+				strDOM +='</div>';		
+			}
+			
+			//4. 이미지 컨테이너에 3번째에서 생성한 이미지 패널들을 추가하기.
+			var $roomContainer = $("#room_container");
+			$roomContainer.append(strDOM);
+		}
+		function createMember(strInfo){
+			//1. JSON 포멧 문자열을 JavaScript Object로 변경시키기.
+			//var objImageInfo = eval("("+strInfo+")"); 
+			objSeatInfo = JSON.parse(strInfo);
+			var member = objSeatInfo.member;
+			
+			var strDOM = "";
+			for(var i=0;i<member.length;i++){
+				//2. N번째 이미지 정보 구하기.
+				var mem =member[i];				
+				
+				var seat_target_id = 'seat'+mem.seat_id;
+				
+				var seat_target = document.getElementById(seat_target_id);
+				seat_target.style.backgroundColor = '#00c4a7';				
+				seat_target.innerHTML += '<div class="seat_host">'+mem.host+'</div>';
+			}		
+		}
+		function miniRoom(event){
+			var target = event.target.parentNode.nextSibling.nextSibling;
+			console.log(target);
+			target.classList.toggle('hide');
+			target.classList.toggle('show');
+		}
+		function moveRoom(event){
+			drag_target = event.target;
+			var target = drag_target.parentNode;
+			target.style.zIndex += 100;
+			drag_offset_left = target.offsetLeft;
+			drag_offset_top = target.offsetTop;
+			
+			document.addEventListener('mousemove', doMove, false);
+   			document.addEventListener('mouseup', stopMove, false);
+		}
+		function doMove(event) {
+			var target = drag_target.parentNode;
+			
+		   	target.style.left = (event.clientX - drag_offset_left) + 'px';//event.offsetX
+		   	target.style.top = (event.clientY - drag_offset_top) + 'px';//event.offsetY
+		}
+
+		function stopMove() {
+			
+			document.removeEventListener('mousemove', doMove, false);    
+		   	document.removeEventListener('mouseup', stopMove, false);
+		}
+		function resizeRoom(event){
+			drag_target = event.target;
+			document.addEventListener('mousemove', doResize, false);
+   			document.addEventListener('mouseup', stopResize, false);
+		}
+		function doResize(event) {
+			var target = drag_target.parentNode;
+		   	target.style.width = (event.clientX - target.offsetLeft) + 'px';
+		   	target.style.height = (event.clientY - target.offsetTop) + 'px';
+		}
+
+		function stopResize() {
+			document.removeEventListener('mousemove', doResize, false);    
+		   	document.removeEventListener('mouseup', stopResize, false);
+		}
+	</script>
+</head>
+
+	<body>
+		<div>
+			<button id="btn_load_seat" class="button is-primary">자리 배치 읽어들이기</button>
+			<button id="btn_load_member" class="button is-primary">회원 읽어들이기</button>
+		</div>
+		<div id="room_container" class="is-clearfix" style="position:relative;">
+			<!-- 이곳에 열람실이 배치됩니다-->
+		</div>
+		
+		
+	</body>
+
+</html>
+
+

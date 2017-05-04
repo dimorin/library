@@ -1,36 +1,127 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD Xhtml 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">	
-	<title></title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.0/css/bulma.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-	<style>
-		.hide{display:none;}
-		.show{display:block;}
-	</style>
-	</style>
-	<script  type="text/javascript"  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	
-	<script>
-		var xmlHttp;
-		var load_json;
-		var drag_target, drag_offset_left, drag_offset_top;
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">	
+		<title></title>
+		<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.0/css/bulma.min.css">-->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+		<style>
+			.hide{display:none;}
+			.show{display:block;}
+			.unit{float:left; display:inline-block; width:30px; height:30px; box-sizing:border-box; margin:2px;border-radius:3px;}
+			.able{background:yellowgreen; opacity:1;}
+	    	.unable{background:yellowgreen; opacity:0.3;}
+	    	.clearfix{clear:both;}
+	    	.passage{background:white; opacity:1;}
+		</style>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>		
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	</head>
+	<body>
+		<nav class="navbar navbar-inverse">
+  			<div class="container-fluid">
+    			<div class="navbar-header">
+      				<a class="navbar-brand" href="#">아라기연 자리배치도</a>
+    			</div>
+    			<ul class="nav navbar-nav navbar-right">
+      				
+      				<li><a class="button is-info modal-button" data-toggle="modal" data-target="#modal-room">자리 배치 세팅하기</a></li>
+      				<li><a class="button is-info modal-button" data-toggle="modal" data-target="#modal-member">회원 세팅하기</a></li>
+      				<li><a class="btn_load button is-primary" data-json="seat.json">자리 배치 읽어들이기</a></li>
+      				<li><a class="btn_load button is-primary" data-json="member.json">회원 읽어들이기</a></li>
+    			</ul>
+  			</div>
+		</nav>
+		<!-- Modal -->
+		<div class="modal fade" id="modal-room" role="dialog" data-page="room.html">
+	    	<div class="modal-dialog modal-lg">
+	      		<div class="modal-content">
+	        		<div class="modal-header">
+	          			<button type="button" class="close" data-dismiss="modal">&times;</button>
+	          			<h4 class="modal-title">자리배치 세팅하기</h4>
+	        		</div>
+	        		<div class="modal-body">
+	          			<p>This is a large modal.</p>
+	        		</div>
+	        		<div class="modal-footer">
+	          			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        		</div>
+	      		</div>
+	    	</div>
+	  	</div>
 
-		window.onload=function(){
-			$("#btn_load_seat").click(function(){
-				load_json = 'seat.json';
-				startLoadFile(load_json);	
+	  	<div class="modal fade" id="modal-member" role="dialog" data-page="member.html">
+	    	<div class="modal-dialog modal-lg">
+	      		<div class="modal-content">
+	        		<div class="modal-header">
+	          			<button type="button" class="close" data-dismiss="modal">&times;</button>
+	          			<h4 class="modal-title">회원 세팅하기</h4>
+	        		</div>
+	        		<div class="modal-body">
+	          			<p>This is a large modal.</p>
+	        		</div>
+	        		<div class="modal-footer">
+	          			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        		</div>
+	      		</div>
+	    	</div>
+	  	</div>
+		<section class="section">
+			<div id="room_container" class="is-clearfix" style="position:relative; min-height:500px;">
+				<!-- 이곳에 열람실이 배치됩니다-->
+			</div>
+		</section>		
+		
+		<script>
+		var xmlHttp;
+		var drag_target, drag_offset_left, drag_offset_top;		
+				
+		$(document).ready(function(){
+			initEventListener();	
+		});
+
+		function initEventListener(){
+			/*
+			$('.modal-button').click(function() {
+			    var target = $(this).data('target');
+			    //$('html').addClass('is-clipped');
+			    //$(target).addClass('is-active');
+			    console.log("target : "+target);
+			    $(target).modal("show");
+			    var page = $(this).data('page');
+			    startLoadFile(page);
 			});
-			$("#btn_load_member").click(function(){
-				load_json = 'member.json';
-				startLoadFile(load_json);	
+			*/
+			$("#modal-room").on('show.bs.modal', function (e) {
+            	var page = $(this).data('page');
+            	startLoadFile(page);
+    		});
+
+			$("#modal-member").on('show.bs.modal', function (e) {
+            	var page = $(this).data('page');
+            	startLoadFile(page);
+    		});
+
+			$('.modal-background, .modal-close').click(function() {
+				$('html').removeClass('is-clipped');
+			    $(this).parent().removeClass('is-active');
+			});
+
+			$('.modal-card-head .delete, .modal-card-foot .button').click(function() {
+			    $('html').removeClass('is-clipped');
+				$('.modal').removeClass('is-active');
+			});
+
+			$(".btn_load").click(function(){
+				var target = $(this).data('json');
+				startLoadFile(target);	
 			});
 		}
-		
+
 		function startLoadFile(file){			
 			xmlHttp = createXMLHTTPObject();// 1. 브라우저에 따른 XMLHttpRequest생성하기.			
-			xmlHttp.onreadystatechange=on_ReadyStateChange;// 2. 요청에 대한 응답처리 이벤트 리스너 등록.			
+			xmlHttp.onreadystatechange=on_ReadyStateChange.bind(file);// 2. 요청에 대한 응답처리 이벤트 리스너 등록.			
 			xmlHttp.open("GET", file, true);// 3.서버로 보낼 데이터 생성.	// 4. GET 방식으로 데이터 보내기, 응답은 비동기로 클라이언트<->서버간의 연결 요청준비.			
 			xmlHttp.send(null);// 5. 실제 데이터 전송.
 		}
@@ -52,7 +143,7 @@
 			
 		// 6.응답처리.
 		function on_ReadyStateChange(){
-			console.log('ready'+load_json+xmlHttp.readyState);
+			var file = this;
 			// 4=데이터 전송 완료.(0=초기화전,1=로딩중,2=로딩됨,3=대화상태)
 			if(xmlHttp.readyState==4){
 				//200은 에러 없음.(404=페이지가 존재하지 않음)
@@ -60,24 +151,44 @@
 					// 서버에서 받은 값.
 					alert("서버에서 받은 원본 데이터 : "+xmlHttp.responseText);					
 					//7. 데이터 파싱처리.
-					if(load_json == 'seat.json'){
+					/*
+					if(file == 'seat.json'){
 						createSeats(xmlHttp.responseText);
-					}else if(load_json == 'member.json'){
+					}else if(file == 'member.json'){
 						createMember(xmlHttp.responseText);
-					}					
+					}
+					*/	
+					switch (file.split(',').join('')) {
+					    case "seat.json":
+					    	createSeats(xmlHttp.responseText);
+					        break;
+					    case "member.json":
+					    	createMember(xmlHttp.responseText);
+					        break;
+					    default:
+					    	loadPageToModal(file, xmlHttp.responseText);
+					}				
 				}
 				else{
 					alert("처리중 에러가 발생했습니다.");
 				}
 			}
 		}
-		
+
+		function loadPageToModal(file, page_contents){
+			if(file == 'room.html'){
+				$("#modal-room .modal-body").html(page_contents);				
+			}else if(file == 'member.html'){
+				$("#modal-member .modal-body").html(page_contents);					
+			}		
+		}
+
 		//7.JSON 포멧 데이터 처리.
 		function createSeats(strInfo){
 			//1. JSON 포멧 문자열을 JavaScript Object로 변경시키기.
 			//var objImageInfo = eval("("+strInfo+")"); 
 			objSeatInfo = JSON.parse(strInfo);
-			var seats = objSeatInfo.seats;
+			var seats = objSeatInfo.rows;
 			
 			var strDOM = "";
 			for(var i=0;i<seats.length;i++){
@@ -89,28 +200,31 @@
 				var seat_length = seat.howmany;
 				for(j=0; j<seat_length; j++){
 					var seat_id = (seat.startNumber+j);
-					strSeat += '<div class="seat box is-pulled-left" id=seat'+seat_id+'>';
+					strSeat += '<div class="seat btn btn-default btn-lg" id=seat'+seat_id+'>';
 					strSeat += '<div class="seat_id">'+seat_id+'</div>';
+					strSeat += '<div class="seat_host"></div>';
 					strSeat += '</div>';
 				}
-
-				//3. N번째 이미지 패널 생성하기.			
-				strDOM +='<div class="room box is-clearfix" style="position:relative; display:inline-block;">';
+				
+				//3. N번째 이미지 패널 생성하기.		
+				strDOM +='<div class="panel panel-default" style="display:inline-block">';	
+				strDOM +='<div class="room panel-body is-clearfix" style="position:relative; display:inline-block;">';
 				strDOM +='	<div class="title" onmousedown="moveRoom(event)" style="background:#ddd; cursor:move;">'+seat.title+'<a href="#" onclick="miniRoom(event)" style="float:right; display:inline-block; width:10px; height:10px; background:#aaa;"></a></div>';
 				strDOM +='	<div class="seat_container show">'+strSeat+'</div>';
 				strDOM +='  <div class="resize" onmousedown="resizeRoom(event)" style="position:absolute; bottom:0; right:0; display:inline-block; width:20px; height:20px; background:#ddd; cursor: se-resize;"></div>';
+				strDOM +='</div>';	
 				strDOM +='</div>';		
 			}
 			
 			//4. 이미지 컨테이너에 3번째에서 생성한 이미지 패널들을 추가하기.
 			var $roomContainer = $("#room_container");
-			$roomContainer.append(strDOM);
+			$roomContainer.html(strDOM);
 		}
 		function createMember(strInfo){
 			//1. JSON 포멧 문자열을 JavaScript Object로 변경시키기.
 			//var objImageInfo = eval("("+strInfo+")"); 
 			objSeatInfo = JSON.parse(strInfo);
-			var member = objSeatInfo.member;
+			var member = objSeatInfo.rows;
 			
 			var strDOM = "";
 			for(var i=0;i<member.length;i++){
@@ -121,12 +235,12 @@
 				
 				var seat_target = document.getElementById(seat_target_id);
 				seat_target.style.backgroundColor = '#00c4a7';				
-				seat_target.innerHTML += '<div class="seat_host">'+mem.host+'</div>';
+				//seat_target.innerHTML += '<div class="seat_host">'+mem.host+'</div>';
+				seat_target.querySelector(".seat_host").innerHTML = mem.host;
 			}		
 		}
 		function miniRoom(event){
 			var target = event.target.parentNode.nextSibling.nextSibling;
-			console.log(target);
 			target.classList.toggle('hide');
 			target.classList.toggle('show');
 		}
@@ -168,20 +282,7 @@
 		   	document.removeEventListener('mouseup', stopResize, false);
 		}
 	</script>
-</head>
-
-	<body>
-		<div>
-			<button id="btn_load_seat" class="button is-primary">자리 배치 읽어들이기</button>
-			<button id="btn_load_member" class="button is-primary">회원 읽어들이기</button>
-		</div>
-		<div id="room_container" class="is-clearfix" style="position:relative;">
-			<!-- 이곳에 열람실이 배치됩니다-->
-		</div>
-		
-		
 	</body>
-
 </html>
 
 

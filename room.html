@@ -48,9 +48,11 @@
 		    <label>행 : <input type="number" name="cols" value="4" /></label>, 
 		    <label>열 : <input type="number" name="rows" value="4" /></label>
 		</fieldset>
-		<div class="unit_container">
-			
-		</div>
+		<div class="unit_wrap">
+			<div class="unit_container">
+				
+			</div>
+		</div>	
 		<button class="fix_seat">빈영역없애기</button>
 		<button class="init_seat">초기화</button>
 		<button class="get_seat">자리 배치 정보 가져오기</button>
@@ -166,7 +168,7 @@
 
       			$(".unit_container").html(seat_value);
 
-      			$(".unit").on("click",function(){
+      			$(".unit_wrap .unit").on("click",function(){//jqgrid 안에선 동작하지 않게 하려고 unit_wrap으로 감쌈
 	      			//console.log('click');
 	      			if($(this).hasClass("able")){
 	      				//console.log('able click');

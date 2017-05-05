@@ -20,9 +20,10 @@
     <meta charset="utf-8" />
     <title>자리배치 세팅</title>
     <style>
-    	.unit_container{padding:10px; background:grey;}
+    	.unit_container{background:grey;}
     	.unit_container:after{content:''; clear:both; display:block;}
-    	.unit{float:left; display:inline-block; width:30px; height:30px; box-sizing:border-box; margin:2px; cursor:pointer; border-radius:3px;}
+    	.unit{float:left; display:inline-block; width:30px; height:30px; box-sizing:border-box; border:1px solid green; cursor:pointer;}
+    	.unit:before, .unit:after{content:'';}
     	.able{background:yellowgreen; opacity:1;}
     	.unable{background:yellowgreen; opacity:0.3;}
     	.clearfix{clear:both;}

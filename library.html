@@ -9,11 +9,11 @@
 		<style>
 			.hide{display:none;}
 			.show{display:block;}
-			.unit{float:left; display:inline-block; width:30px; height:30px; box-sizing:border-box; margin:2px;border-radius:3px;}
+			.unit{float:left; display:inline-block; width:50px; height:50px; box-sizing:border-box; margin:2px;border-radius:3px;}
 			.able{background:yellowgreen; opacity:1;}
 	    	.unable{background:yellowgreen; opacity:0.3;}
 	    	.clearfix{clear:both;}
-	    	.passage{background:white; opacity:1;}
+	    	.passage{width:20px; height:20px; background:white; opacity:1;}
 		</style>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>		
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -206,8 +206,12 @@
 					strSeat += '</div>';
 				}
 				
+				if(seat.map !=''){//자리배치도 맵이 있다면
+					strSeat = seat.map;
+				};
+
 				//3. N번째 이미지 패널 생성하기.		
-				strDOM +='<div class="panel panel-default" style="display:inline-block">';	
+				strDOM +='<div class="panel panel-default" style="display:inline-block; vertical-align:top;">';	
 				strDOM +='<div class="room panel-body is-clearfix" style="position:relative; display:inline-block;">';
 				strDOM +='	<div class="title" onmousedown="moveRoom(event)" style="background:#ddd; cursor:move;">'+seat.title+'<a href="#" onclick="miniRoom(event)" style="float:right; display:inline-block; width:10px; height:10px; background:#aaa;"></a></div>';
 				strDOM +='	<div class="seat_container show">'+strSeat+'</div>';

@@ -20,45 +20,49 @@
     <meta charset="utf-8" />
     <title>자리배치 세팅</title>
     <style>
-    	.unit_container{background:grey;}
+    	
     	.unit_container:after{content:''; clear:both; display:block;}
     	.unit{float:left; display:inline-block; width:30px; height:30px; box-sizing:border-box; border:1px solid green; cursor:pointer;}
     	.unit:before, .unit:after{content:'';}
-    	.able{background:yellowgreen; opacity:1;}
-    	.unable{background:yellowgreen; opacity:0.3;}
+    	.able{position:relative; background:yellowgreen; opacity:1;}
+    	.able:before{content:'d'; display:'inline-block'; position:absolute; right:0; bottom:0; font-size:9px;}
+    	.unable{position:relative; background:yellowgreen; opacity:0.3;}
+    	.unable:before{content:'no-d'; display:'inline-block'; position:absolute; right:0; bottom:0; font-size:9px;}
     	.clearfix{clear:both;}
-    	.passage{background:white; opacity:1;}
-    	.nonpassage{background:white; opacity:0;}
+    	.passage{opacity:0; border:0;}
+    	input[readonly]{border:0;}
+    	input[readonly].title{width:700px;}
+    	
     </style>
 </head>
 <body>
-	<div style="margin-left:8px;">
-	    <table id="jqGrid"></table>
-	    <div id="jqGridPager"></div>
-	    <div id="detailsPlaceholder">
-	        <table id="jqGridDetails"></table>
-	        <div id="jqGridDetailsPager"></div>
-	    </div>
-	</div>
-	<div style="margin:8px;">
-		<fieldset>
-		    <legend>자리 배치 설정</legend>
-		    <label>선택된 방 이름 : <input type="text" name="title" value="" readonly /></label>, 
-		    <label>선택된 방 시작 번호 : <input type="text" name="startNumber" value="" readonly /></label>, 
-		    <label>행 : <input type="number" name="cols" value="4" /></label>, 
-		    <label>열 : <input type="number" name="rows" value="4" /></label>
-		</fieldset>
-		<div class="unit_wrap">
+	<div style="width:850px; margin:0 auto; padding:20px;">
+		<div>
+		    <table id="jqGrid"></table>
+		    <div id="jqGridPager"></div>
+		    <div id="detailsPlaceholder">
+		        <table id="jqGridDetails"></table>
+		        <div id="jqGridDetailsPager"></div>
+		    </div>
+		</div>
+		<div style="border:1px solid #ddd; padding:10px; border-radius:3px; margin:20px 0;">
+			<h4><input type="text" name="title" class="title" value="" readonly /> </h4>
+			<fieldset>			    
+			    <label>방 시작 번호 : <input type="text" name="startNumber" value="" readonly /></label><br> 
+			    <label>행 : <input type="number" name="cols" value="4" /></label>, 
+			    <label>열 : <input type="number" name="rows" value="4" /></label>
+			</fieldset>
+			<hr>
+			<button class="init_seat">초기화</button>
+			<button class="get_seat">자리에 번호 매기기</button>
+			<button class="set_seat">자리 배치 정보 적용하기</button>
+			<hr>
 			<div class="unit_container">
 				
-			</div>
-		</div>	
-		<button class="fix_seat">빈영역없애기</button>
-		<button class="init_seat">초기화</button>
-		<button class="get_seat">자리 배치 정보 가져오기</button>
-		<button class="set_seat">자리 배치 정보 적용하기</button>
-	</div>
-	<button id="getData" class="btn btn-default">GET DATA</button>	
+			</div>			
+		</div>
+		<button id="getData" class="btn btn-default">GET DATA</button>	
+    </div>
     <script type="text/javascript">
       	$(document).ready(function () {
       		var selected_row;
@@ -82,19 +86,19 @@
                     { label: 'startNumber', name: 'startNumber', width: 120, editable: true},
                     { label: 'map', name: 'map', width:400 }
                 ],
-                width: 800,
+                autowidth:true,
                 height: 200,
                 rowNum: 5,
 				viewrecords: true,
 				loadonce: true,
-				caption: 'room',
+				caption: '열람실',
 				sortname: 'title',
           		sortorder : 'asc',
                 onSelectRow: function(rowid, selected) {                	
 					if(rowid != null) {
 						var rowObj = $(this).getRowData(rowid);
                 		//console.log(rowObj);
-						$('input[name=title]').val(rowObj.title);
+						$('input[name=title]').val(rowObj.title+"의 자리 배치 세부 설정");
 						$('input[name=startNumber]').val(rowObj.startNumber);
 						selected_row = rowid;
 						selected_rowData =rowObj;
@@ -144,6 +148,8 @@
       		var $cols = $('input[name=cols]'), $rows = $('input[name=rows]');
       		var seat_value = [];
       		
+      		
+
       		function updateView(){				
 				seat_value=[];
 				$(".unit_container").empty();
@@ -152,24 +158,31 @@
 
 		    	//console.log(colsNum, rowsNum);
 		   		for(var i=0; i<colsNum; i++){
-      				if(i){
-      					for(var j=0; j<rowsNum; j++){
-	      					var unit = (j === (0))? "<div class='unit nonpassage clearfix'></div>":"<div class='unit nonpassage'></div><div class='unit nonpassage'></div>";
-	      					seat_value.push(unit);
-	      				}
-      				}
-	      		
       				for(var j=0; j<rowsNum; j++){
       					//console.log(i,j);
-      					var unit = (j === (0))? "<div class='unit able clearfix'><div class='seat_id'></div><div class='seat_host'></div></div>":"<div class='unit nonpassage'></div><div class='unit able'><div class='seat_id'></div><div class='seat_host'></div></div>";
+      					var unit = (j === (0))? "<div class='unit able clearfix'><div class='seat_id'></div><div class='seat_host'></div></div>":"<div class='unit able'><div class='seat_id'></div><div class='seat_host'></div></div>";
       					seat_value.push(unit);
       				}
       			}
 
       			$(".unit_container").html(seat_value);
 
-      			$(".unit_wrap .unit").on("click",function(){//jqgrid 안에선 동작하지 않게 하려고 unit_wrap으로 감쌈
+      			$(".unit").on("click",function(){//jqgrid 안에선 동작하지 않게 하려고 unit_wrap으로 감쌈
 	      			//console.log('click');
+	      			
+	      			if($(this).hasClass("able")){
+	      				$(this).removeClass("able");
+	      				$(this).addClass("unable");
+	      			}else if($(this).hasClass("unable")){
+		      			$(this).removeClass("unable");
+	      				$(this).addClass("passage");
+	      			}else if($(this).hasClass("passage")){
+		      			$(this).removeClass("passage");
+	      				$(this).addClass("able");
+	      			}
+
+	      			
+	      			/*
 	      			if($(this).hasClass("able")){
 	      				//console.log('able click');
 	      				$(this).removeClass("able");
@@ -189,38 +202,50 @@
 	      				$(this).removeClass("passage");
 	      				$(this).addClass("nonpassage");
 	      			}
+	      			*/
 	      		});
 			};
 			updateView();      		
+
+			
 
 			function fn_init_seat(){
 				$('input[name=cols]').val(4);
       			$('input[name=rows]').val(4);
 				updateView();      			
 			}
-
+			/*
       		$(".fix_seat").on("click",function(){
       			$(".nonpassage").remove();
       		});
+      		*/
       		$(".init_seat").on("click", fn_init_seat);
       		$(".get_seat").on("click", function(){
-      			
+      			var num = selected_startNumber;
       			
       			var $div = $(".unit_container").find("div"); 
       			var unit_len = $div.length;
 
       			for(var i=0; i<unit_len; i++){
       				if($div.eq(i).hasClass("able")){
-      					var count = selected_startNumber++;
+      					var count = num++;
       					$div.eq(i).attr('id', 'seat'+count);
       					$div.eq(i).find(".seat_id").html(count);
       				}
       				if($div.eq(i).hasClass("unable")){
       					$div.eq(i).attr('id', null);
-      					$div.eq(i).find(".seat_id").empty();
-      				}      				
+      					$div.eq(i).find(".seat_id").remove();
+      					$div.eq(i).find(".seat_host").remove();
+      				}  
+      				if($div.eq(i).hasClass("passage")){
+      					$div.eq(i).attr('id', null);
+      					$div.eq(i).find(".seat_id").remove();
+      					$div.eq(i).find(".seat_host").remove();
+      				}  
+      							
       			}
       			alert($(".unit_container").html());
+      			$(".unit").off("click");
       			/*
       			var map = [];
       			var $div = $(".unit_container").find("div"); 

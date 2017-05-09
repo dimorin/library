@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title></title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.0/css/bulma.min.css">
+	<link rel="stylesheet" href="ui.css">	
+</head>
+<body>
+	<section class="section ">
+	    <div class="container">
+	      	<div class="heading">
+	       		<h1 class="title">DRAG & DROP</h1>
+	       		 <h2 class="subtitle">      좌석을 생성하고, 생성한 좌석을 원하는 위치로 옮겨보세요.        </h2>
+	     	</div>	      	
+	    </div>
+  	</section>	
+  	<section class="section is-clearfix">
+	    <div class="container">	
+	    	<div id="room_board" class="is-clearfix">
+	    		<div id="room_wrap_temp" class="room_wrap">
+			    	<div class="draggable_bar" onmousedown="_drag_init(this)">
+			    		<h1>room</h1>
+			    		<div class="button is-info fl-right" id="create_seat" onclick="createBlock(event)">블락 생성</div>
+			    	</div>    	
+		     		<div class="room box is-pulled-left" ondragenter="return dragEnter(event)"
+				     ondrop="return dragDrop(event)" ondragover="return dragOver(event)"></div>
+			    </div> 				 	   	    	
+	    	</div> 
+	    	<div class="is-clearfix">	
+		    	<div id="seats" class="box is-pulled-left"  ondragenter="return dragEnter(event)" 
+				     ondrop="return dragDrop(event)" 
+				     ondragover="return dragOver(event)">
+				     	seat
+			     	<div style="display:none;">
+			     		<div class="drag button is-primary" id="temp" draggable="true" ondragstart="return dragStart(event)">drag me!</div>
+			     	</div>				
+				</div>
+				<div id="control" class="box is-pulled-left">
+			     	
+			     	<div class="button is-info" id="create_seat" onclick="createRoom(event)">room 생성</div>
+			     	
+					
+					<div class="button is-info" id="create_seat" onclick="createSeat(event)">좌석 생성</div>
+				</div>	    	   	
+			</div>	
+	    </div>
+  	</section>	
+	<footer class="footer">
+  		<div class="container">
+    		<div class="content has-text-centered">
+      			<p>
+			        <strong>Bulma</strong> by <a href="http://jgthms.com">Jeremy Thomas</a>. The source code is licensed
+			        <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
+			        is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC ANS 4.0</a>.
+				</p>
+     			<p>
+	        		<a class="icon" href="https://github.com/jgthms/bulma">
+	          			<i class="fa fa-github"></i>
+	        		</a>
+      			</p>
+    		</div>
+  		</div>
+	</footer>
+	<script type="text/javascript" src="ui.js"></script>
+</body>
+</html>

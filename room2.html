@@ -50,8 +50,9 @@
 		<ol>
 			<li>열람실 목록에서 원하는 행을 클릭하여 선택하면,<br><strong>map 세부설정</strong>하는 내용이 아래에 나옵니다.</li>
 			<li><strong>열람실의 전체적인 크기 세팅</strong> : 행, 열 값을 조정합니다.</li>
-			<li><strong>자리의 상태 세팅 방법1</strong> : 숫자 칸을 클릭하여, 해당 행 또는 열을 선택합니다.<br>라디오버튼을 클릭하여 선택합니다.</li>
-			<li><strong>자리의 상태 세팅 방법2</strong> : 자리를 직접 클릭하여 해당 자리의 상태를 세팅할 수도 있습니다.</li>
+			<li><strong>자리의 상태 세팅 방법0</strong> : <strong>샘플</strong>에서 원하는 배치를 클릭하여 선택합니다.</li>
+			<li><strong>자리의 상태 세팅 방법1</strong> : <strong>숫자 칸</strong>을 클릭하여, 해당 행 또는 열을 선택합니다.<br>라디오버튼을 클릭하여 선택합니다.</li>
+			<li><strong>자리의 상태 세팅 방법2</strong> : 자리를 <strong>직접</strong> 클릭하여 해당 자리의 상태를 세팅할 수도 있습니다.</li>
 			<li><strong>자리 배치 완료 버튼</strong> : 책상 자리에만 번호가 부여되며 이로써 배치 작업을 완료합니다. </li>
 			<li><strong>테이블에 적용 버튼</strong> : 열람실 목록 테이블에 적용됩니다.</li>
 			<li><strong>GET DATA 버튼</strong> : 열람실 목록 json 타입의 data를 DB에 전달합니다.(현재는 콘솔에 data 보여주기 기능만 있음.)</li>
@@ -172,7 +173,7 @@
 						if(rowObj.map){
 							//$(".unit_container").html(rowObj.map);
 							get_rows_cols(rowObj.map);
-							updateView();
+							updateView(rowObj.map);
 						}else{
 							fn_init_seat();
 						}
@@ -212,9 +213,9 @@
 	            }
 			});
 	        
-			$(".sample_unit_container").on("click", function(){
+			$(".sample_unit_container").on("click", function(){//on, off 좀더 디테일하게 구현하기
 				get_rows_cols($(this).html());
-				updateView();
+				updateView($(this).html());
 			});
 
 			function get_rows_cols(map){	//map 문자열 정보에서 가로 세로 값 추출하여 행, 열 input value 세팅				
@@ -230,7 +231,8 @@
 				$('input[name=rows]').val(rows);			
 			}      		
 
-      		function updateView(){//행, 열 input에 있는 value 값으로 unit, control_unit 배치				
+      		function updateView(map_data){//행, 열 input에 있는 value 값으로 unit, control_unit 배치		
+				console.log("map_data : "+map_data);
 				seat_value=[];
 				$(".unit_container").empty();
 				$(".control_unit").remove();
@@ -256,13 +258,23 @@
 					$(".unit_wrap").append("<div class='control_unit' data-cols='"+i+"' style='top:"+top+"; left:"+left+";'>"+i+"</div>");
 				}
 				
-		   		for(var i=0; i<rowsNum; i++){
-      				for(var j=0; j<colsNum; j++){
-      					//console.log(i,j);
-      					var unit = (j === (0))? "<div class='unit able clearfix' data-rows="+i+" data-cols="+j+"><div class='seat_id'></div><div class='seat_host'></div></div>":"<div class='unit able' data-rows="+i+" data-cols="+j+"><div class='seat_id'></div><div class='seat_host'></div></div>";
-      					seat_value.push(unit);
-      				}
-      			}
+		   		
+				if(map_data != undefined){					
+					for(var i=0; i<rowsNum; i++){
+						for(var j=0; j<colsNum; j++){
+							var new_class = $($(map_data)[(i*colsNum)+j]).attr("class");						
+							var unit = (j === (0))? "<div class='"+new_class+"' data-rows="+i+" data-cols="+j+"><div class='seat_id'></div><div class='seat_host'></div></div>":"<div class='"+new_class+"' data-rows="+i+" data-cols="+j+"><div class='seat_id'></div><div class='seat_host'></div></div>";
+							seat_value.push(unit);
+						}
+					}
+				}else{
+					for(var i=0; i<rowsNum; i++){
+						for(var j=0; j<colsNum; j++){
+							var unit = (j === (0))? "<div class='unit able clearfix' data-rows="+i+" data-cols="+j+"><div class='seat_id'></div><div class='seat_host'></div></div>":"<div class='unit able' data-rows="+i+" data-cols="+j+"><div class='seat_id'></div><div class='seat_host'></div></div>";
+							seat_value.push(unit);
+						}
+					}
+				}
 
       			$(".unit_container").html(seat_value);
 				$(".control_unit").on("click",function(){
@@ -370,10 +382,10 @@
 				$(".unit_wrap .control_unit").off("click");
 				$(".unit_container .unit").css("cursor","default");
 				$(".unit_wrap .control_unit").css("cursor","default");
-				$(".unit_container .unit").removeAttr("style data-rows data-cols");
+				
 				$(".get_seat").attr("disabled", true);
 				$(".set_seat").attr("disabled", false);
-      			alert($(".unit_container").html());
+      			
 				/*
       			var map = [];
       			var $div = $(".unit_container").find("div"); 
@@ -387,6 +399,8 @@
       			*/      			
       		});
       		$(".set_seat").on("click",function(){
+				$(".unit_container .unit").removeAttr("style data-rows data-cols");
+				alert($(".unit_container").html());
       			selected_rowData.map = $(".unit_container").html();
       			$('#jqGrid').jqGrid('setRowData', selected_row, selected_rowData);
 				$(this).attr("disabled", true);

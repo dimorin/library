@@ -23,16 +23,18 @@
     	.control_unit{position:absolute; display:inline-block; width:30px; height:30px; box-sizing:border-box; border:1px solid green; cursor:pointer;  -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}
 		.unit_wrap{position:relative; padding:50px;}
 		.unit_container:after{content:''; clear:both; display:block;}
+		.sample_unit_container{display:inline-block; margin:5px; padding:5px; border:1px solid #ddd; vertical-align:top;}
+		.sample_unit_container:after{content:''; clear:both; display:block;}
     	.unit{float:left; display:inline-block; width:30px; height:30px; box-sizing:border-box; border:1px solid green; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}
 		.room_table .unit{width:25px; height:25px; font-size:9px;}
-		.map_setting .unit{cursor:pointer;}
+		.unit_container .unit{cursor:pointer;}
     	.unit:before, .unit:after{content:'';}
     	.selected{box-sizing:border-box; border:3px solid green !important;}
 		.able{position:relative; background:yellowgreen;}
     	.unable{position:relative; background:rgba(154,205,50,0.3);}
     	.clearfix{clear:both;}
     	.passage{background:rgba(154,205,50,0.0); border:0;}
-    	input[readonly]{border:0;}
+    	.map_title, .map_startNumber{display:inline-block;}
 		input[type=number]{width:50px;}
 		label{font-weight:normal;}
     	.room_table{-webkit-transition:all 0.3s; transition:all 0.3s;}
@@ -75,7 +77,22 @@
 		</div>
 		<div class="map_setting">
 			<h4 style="display:inline-block; margin-right:10px;"><strong>map</strong> 세부설정</h4>
-			<input type="text" name="title" class="title" value="" readonly />, <label>방 시작 번호 : <input type="text" name="startNumber" value="" readonly /></label><br> 
+			<div class="map_title"></div>, <div class="map_startNumber"></div><br> 
+			<hr>
+			<div style="">
+				<h5>샘플</h5>
+				<div style="">
+					<div class="sample_unit_container">
+						<div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit clearfix passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div>
+					</div>
+					<div class="sample_unit_container">
+						<div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit clearfix passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div>
+					</div>
+					<div class="sample_unit_container">
+						<div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit clearfix passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit clearfix passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div>
+					</div>
+				</div>
+			</div>
 			<hr>
 			<fieldset class="room_size">
 				<span>열람실 전체적인 크기 : </span>
@@ -144,8 +161,10 @@
 					if(rowid != null) {
 						var rowObj = $(this).getRowData(rowid);
                 		//console.log(rowObj);
-						$('.map_setting input[name=title]').val(rowObj.title);
-						$('.map_setting input[name=startNumber]').val(rowObj.startNumber);
+						//$('.map_setting input[name=title]').val(rowObj.title);
+						//$('.map_setting input[name=startNumber]').val(rowObj.startNumber);
+						$(".map_title").text('열람실 이름 : '+rowObj.title);
+						$(".map_startNumber").text('좌석 시작 번호 : '+rowObj.startNumber);
 						selected_row = rowid;
 						selected_rowData =rowObj;
 						selected_startNumber = rowObj.startNumber;
@@ -193,6 +212,10 @@
 	            }
 			});
 	        
+			$(".sample_unit_container").on("click", function(){
+				get_rows_cols($(this).html());
+				updateView();
+			});
 
 			function get_rows_cols(map){	//map 문자열 정보에서 가로 세로 값 추출하여 행, 열 input value 세팅				
 				var rows = (map.match(/clearfix/g) || []).length;
@@ -274,7 +297,7 @@
 					$(".unit.selected").removeClass("able unable passage");
 					$(".unit.selected").addClass(e.target.value);
 				});
-      			$(".map_setting .unit").on("click",function(){//jqgrid 안에선 동작하지 않게 하려고 unit_wrap으로 감쌈
+      			$(".unit_container .unit").on("click",function(){//jqgrid 안에선 동작하지 않게 하려고 unit_wrap으로 감쌈
 	      			//console.log('click');
 	      			
 	      			if($(this).hasClass("able")){
@@ -342,11 +365,12 @@
       							
       			}
       			
-				$(".map_setting .unit, .map_setting .control_unit").removeClass("selected");
-      			$(".map_setting .unit").off("click");
-				$(".map_setting .control_unit").off("click");
-				$(".map_setting .control_unit").css("cursor","auto");
-				$(".map_setting .unit").removeAttr("style data-rows data-cols");
+				$(".unit_container .unit, .unit_wrap .control_unit").removeClass("selected");
+      			$(".unit_container .unit").off("click");
+				$(".unit_wrap .control_unit").off("click");
+				$(".unit_container .unit").css("cursor","default");
+				$(".unit_wrap .control_unit").css("cursor","default");
+				$(".unit_container .unit").removeAttr("style data-rows data-cols");
 				$(".get_seat").attr("disabled", true);
 				$(".set_seat").attr("disabled", false);
       			alert($(".unit_container").html());
@@ -365,6 +389,7 @@
       		$(".set_seat").on("click",function(){
       			selected_rowData.map = $(".unit_container").html();
       			$('#jqGrid').jqGrid('setRowData', selected_row, selected_rowData);
+				$(this).attr("disabled", true);
       		});
       		$('fieldset.room_size').on('input', 'input', function() {
 				updateView();

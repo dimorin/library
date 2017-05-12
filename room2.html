@@ -37,11 +37,60 @@
     	.map_title, .map_startNumber{display:inline-block;}
 		input[type=number]{width:50px;}
 		label{font-weight:normal;}
-    	.room_table{-webkit-transition:all 0.3s; transition:all 0.3s;}
-		.rotateYleft{-webkit-transform:rotateY(20deg); transform:rotateY(20deg); -webkit-transform-origin:left center; transform-origin:left center;}
-		.map_setting{border:1px dashed #ddd; padding:10px; border-radius:3px; margin:20px 0; -webkit-transition:all 0.3s; transition:all 0.3s;}
-		.rotateYright{-webkit-transform:rotateY(-20deg); transform:rotateY(-20deg); -webkit-transform-origin:right center; transform-origin:right center;}
+    	.map_setting{padding:10px; border-radius:3px;}		
 		button[disabled]{opacity:0.5;}
+
+		.modal{bottom: 0; left: 0; position: absolute; right: 0; top: 0; -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+    display: none; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; overflow: hidden; position: fixed;  z-index: 20;}
+		.modal.is-active{display: -webkit-box; display: -ms-flexbox; display: flex;}
+		.modal-background {bottom: 0; left: 0; position: absolute; right: 0; top: 0; background-color: rgba(10, 10, 10, 0.6);}
+		.modal-content{margin:0 auto; overflow:auto; position:relative; width:850px;}
+		.modal-close {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-color: rgba(10, 10, 10, 0.2);
+    border: none;
+    border-radius: 290486px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1rem;
+    height: 20px;
+    outline: none;
+    position: relative;
+    vertical-align: top;
+    width: 20px;
+    background: none;
+    height: 40px;
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    width: 40px;
+}
+.modal-close:before, .modal-close:after {
+    background-color: white;
+    content: "";
+    display: block;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%) rotate(45deg);
+    transform: translateX(-50%) translateY(-50%) rotate(45deg);
+    -webkit-transform-origin: center center;
+    transform-origin: center center; 
+}
+.modal-close:before {
+    height: 2px;
+    width: 50%;
+}
+.modal-close:after {
+    height: 50%;
+    width: 2px;
+}
     </style>
 </head>
 <body>
@@ -71,52 +120,41 @@
 			</ul>
 		</div>
 	</nav>
-	<div style="width:850px; margin:0 auto; padding:20px; -webkit-perspective:800px; perspective:700px;">
+	<div style="width:850px; margin:0 auto; padding:20px;">
 		<div class="room_table">
 		    <table id="jqGrid"></table>
 		    <div id="jqGridPager"></div>		    
 		</div>
-		<div class="map_setting">
-			<h4 style="display:inline-block; margin-right:10px;"><strong>map</strong> 세부설정</h4>
-			<div class="map_title"></div>, <div class="map_startNumber"></div><br> 
-			<hr>
-			<div style="">
-				<h5>샘플</h5>
-				<div style="">
-					<div class="sample_unit_container">
-						<div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit clearfix passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div>
-					</div>
-					<div class="sample_unit_container">
-						<div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit clearfix passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div>
-					</div>
-					<div class="sample_unit_container">
-						<div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit clearfix passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit clearfix passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able clearfix"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit passage"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div><div class="unit able"  ><div class="seat_id"></div><div class="seat_host"></div></div>
-					</div>
-				</div>
-			</div>
-			<hr>
-			<fieldset class="room_size">
-				<span>열람실 전체적인 크기 : </span>
-				<label>행 : <input type="number" name="rows" value="4" /></label>, <label>열 : <input type="number" name="cols" value="4" /></label>
-			</fieldset>
-			<fieldset class="seat_state">
-				<span>자리 상태 : </span>
-				<label><input type="radio" name="unit_state" class="unit_state" value="able">책상 자리</label>
-				<label><input type="radio" name="unit_state" class="unit_state" value="unable">책상 아닌 자리</label>
-				<label><input type="radio" name="unit_state" class="unit_state" value="passage">통로</label>
-			</fieldset>	
-			<hr>
-			<div class="unit_wrap">
-				<div class="unit_container">
+		<div class="modal">
+			<div class="modal-background"></div>
+			<div class="modal-content map_setting">
+				<h4 style="display:inline-block; margin-right:10px;"><strong>map</strong> 세부설정</h4>
+				<div class="map_title"></div>, <div class="map_startNumber"></div><br> 
+				<hr>
+				<fieldset class="room_size">
+					<span>열람실 전체적인 크기 : </span>
+					<label>행 : <input type="number" name="rows" value="4" /></label>, <label>열 : <input type="number" name="cols" value="4" /></label>
+				</fieldset>
+				<fieldset class="seat_state">
+					<span>자리 상태 : </span>
+					<label><input type="radio" name="unit_state" class="unit_state" value="able">책상 자리</label>
+					<label><input type="radio" name="unit_state" class="unit_state" value="unable">책상 아닌 자리</label>
+					<label><input type="radio" name="unit_state" class="unit_state" value="passage">통로</label>
+				</fieldset>	
+				<hr>
+				<div class="unit_wrap">
+					<div class="unit_container">
+					
+					</div>			
+				</div>	
+				<hr>			
+				<button class="init_seat">초기화</button>
+				<button class="get_seat">자리 배치 완료</button>
+				<button class="set_seat">테이블에 적용</button>					
+			</div><!-- end. modal-content-->
+			<button class="modal-close"></button>
+		</div><!-- end.modal -->
 				
-				</div>			
-			</div>	
-			<hr>			
-			<button class="init_seat">초기화</button>
-			<button class="get_seat">자리 배치 완료</button>
-			<button class="set_seat">테이블에 적용</button>
-				
-		</div>
 		<button id="getData" class="btn btn-default">GET DATA</button>	
     </div>
     <script type="text/javascript">
@@ -135,10 +173,11 @@
 		        template += "<div> startNumber : </div><div>{startNumber} </div>";
 		        template += "<hr style='width:100%;'/>";
 		        template += "<div> {sData} {cData}  </div></div>";
-
 			
-			$(".map_setting").hide();
-			
+			$(".modal-close, .modal-background").on("click",function(e){
+				e.preventDefault();
+				$(".modal").removeClass("is-active");
+			});
 			
       		$("#jqGrid").jqGrid({
                 url: 'seat.json',
@@ -178,7 +217,7 @@
 							fn_init_seat();
 						}
 						
-						$(".map_setting").show();
+						$(".modal").addClass("is-active");
 					}					
 				}, // use the onSelectRow that is triggered on row click to show a details grid
 				onSortCol : updateView,

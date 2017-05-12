@@ -443,6 +443,7 @@
       			selected_rowData.map = $(".unit_container").html();
       			$('#jqGrid').jqGrid('setRowData', selected_row, selected_rowData);
 				$(this).attr("disabled", true);
+				$(".modal").removeClass("is-active");
       		});
       		$('fieldset.room_size').on('input', 'input', function() {
 				updateView();

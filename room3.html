@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+     <!-- The jQuery library is a prerequisite for all jqSuite products -->
+    <script  type="text/javascript"  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+    <!-- We support more than 40 localizations -->
+    <script  type="text/javascript" src="jqgrid/grid.locale-kr.js"></script>
+    <!-- This is the Javascript file of jqGrid -->   
+    <script type="text/ecmascript" src="jqgrid/jquery.jqGrid.min.js"></script>
+    <!-- A link to a Boostrap  and jqGrid Bootstrap CSS siles-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
+    <link rel="stylesheet" type="text/css" media="screen" href="jqgrid/ui.jqgrid-bootstrap.css" />
+  <script>
+    $.jgrid.defaults.width = 400;
+    $.jgrid.defaults.responsive = true;
+    $.jgrid.defaults.styleUI = 'Bootstrap';
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <meta charset="utf-8" />
+    <title>자리배치 세팅</title>
+    <style>
+    	.control_unit{position:absolute; display:inline-block; width:30px; height:30px; box-sizing:border-box; border:1px solid green; cursor:pointer;  -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}
+		.unit_wrap{position:relative; padding:50px;}
+		.unit_container:after{content:''; clear:both; display:block;}
+		.unit{float:left; display:inline-block; width:30px; height:30px; box-sizing:border-box; border:1px solid green; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}
+		
+		.unit_container .unit{cursor:pointer;}
+    	.unit:before, .unit:after{content:'';}
+    	.selected{box-sizing:border-box; border:3px solid green !important;}
+		.able{position:relative; background:yellowgreen;}
+    	.unable{position:relative; background:rgba(154,205,50,0.3);}
+    	.clearfix{clear:both;}
+    	.passage{background:rgba(154,205,50,0.0); border:0;}
+    	.map_title, .map_startNumber{display:inline-block;}
+		input[type=number]{width:50px;}
+		label{font-weight:normal;}
+    	.map_setting{padding:10px; border-radius:3px;}		
+		button[disabled]{opacity:0.5;}
+
+		.modal{bottom: 0; left: 0; position: absolute; right: 0; top: 0; -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+    display: none; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; overflow: hidden; position: fixed;  z-index: 20;}
+		.modal.is-active{display: -webkit-box; display: -ms-flexbox; display: flex;}
+		.modal-background {bottom: 0; left: 0; position: absolute; right: 0; top: 0; background-color: rgba(10, 10, 10, 0.6);}
+		.modal-content{margin:0 auto; overflow:auto; position:relative; width:850px;}
+		.modal-close {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-color: rgba(10, 10, 10, 0.2);
+    border: none;
+    border-radius: 290486px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1rem;
+    height: 20px;
+    outline: none;
+    position: relative;
+    vertical-align: top;
+    width: 20px;
+    background: none;
+    height: 40px;
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    width: 40px;
+}
+.modal-close:before, .modal-close:after {
+    background-color: white;
+    content: "";
+    display: block;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%) rotate(45deg);
+    transform: translateX(-50%) translateY(-50%) rotate(45deg);
+    -webkit-transform-origin: center center;
+    transform-origin: center center; 
+}
+.modal-close:before {
+    height: 2px;
+    width: 50%;
+}
+.modal-close:after {
+    height: 50%;
+    width: 2px;
+}
+    </style>
+</head>
+<body>
+	<div style="position:fixed; right:0; top:50px; width:250px; padding:5px; border-radius:3px; background:yellow;">
+		<h4>수정할 거</h4>
+		<ol>
+			<li>자리배치 수정후 테이블에 적용</li>
+			<li>새로만들기</li>
+			<li>json add modify delete 구현</li>
+		</ol>
+	</div>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">아라기연 자리배치도</a>
+			</div>
+			<ul class="nav navbar-nav navbar-right">
+				
+				<li><a href="room2.html" class="button is-info">자리 배치 세팅하기</a></li>
+				<li><a href="member.html" class="button is-info">회원 세팅하기</a></li>
+				<li><a href="index.html" class="btn_load button is-primary">자리 배치 및 회원 읽어들이기</a></li>
+			</ul>
+		</div>
+	</nav>
+	<section class="section">
+		<div id="room_container" class="is-clearfix" style="position:relative; min-height:500px;">
+			<!-- 이곳에 열람실이 배치됩니다-->
+		</div>
+	</section>	
+	
+		
+	<div class="modal">
+		<div class="modal-background"></div>
+		<div class="modal-content map_setting">
+			<h4 style="display:inline-block; margin-right:10px;"><strong>map</strong> 세부설정</h4>
+			<div class="map_title"></div>, <div class="map_startNumber"></div><br> 
+			<hr>
+			<fieldset class="room_size">
+				<span>열람실 전체적인 크기 : </span>
+				<label>행 : <input type="number" name="rows" value="4" /></label>, <label>열 : <input type="number" name="cols" value="4" /></label>
+			</fieldset>
+			<fieldset class="seat_state">
+				<span>자리 상태 : </span>
+				<label><input type="radio" name="unit_state" class="unit_state" value="able">책상 자리</label>
+				<label><input type="radio" name="unit_state" class="unit_state" value="unable">책상 아닌 자리</label>
+				<label><input type="radio" name="unit_state" class="unit_state" value="passage">통로</label>
+			</fieldset>	
+			<hr>
+			<div class="unit_wrap">
+				<div class="unit_container">
+				
+				</div>			
+			</div>	
+			<hr>			
+			<button class="init_seat">초기화</button>
+			<button class="get_seat">자리 배치 완료</button>
+			<button class="set_seat">테이블에 적용</button>					
+		</div><!-- end. modal-content-->
+		<button class="modal-close"></button>
+	</div><!-- end.modal -->
+			
+	<button id="getData" class="btn btn-default">GET DATA</button>	
+    
+    <script type="text/javascript">
+      	$(document).ready(function () {
+      		var selected_row;
+      		var selected_rowData;
+      		var selected_startNumber;	
+			
+			var selected_rows_unit;
+			var selected_cols_unit;
+			
+			var $cols = $('input[name=cols]'), $rows = $('input[name=rows]');
+      		var seat_value = [];
+
+      		$(".modal-close, .modal-background").on("click",function(e){
+				e.preventDefault();
+				$(".modal").removeClass("is-active");
+			});
+			
+			startLoadFile("seat.json");
+      		function startLoadFile(file){			
+				xmlHttp = createXMLHTTPObject();// 1. 브라우저에 따른 XMLHttpRequest생성하기.			
+				xmlHttp.onreadystatechange=on_ReadyStateChange.bind(file);// 2. 요청에 대한 응답처리 이벤트 리스너 등록.			
+				xmlHttp.open("GET", file, true);// 3.서버로 보낼 데이터 생성.	// 4. GET 방식으로 데이터 보내기, 응답은 비동기로 클라이언트<->서버간의 연결 요청준비.		
+				xmlHttp.send(null);// 5. 실제 데이터 전송.
+			}
+		
+			// 1. 브라우저에 따른 XMLHttpRequest생성하기.
+			function createXMLHTTPObject(){
+				var xhr = null;
+				if (window.XMLHttpRequest) {
+					// IE7버전 이상, Chrome, Safari, Firefox, opera등 거의 대부분의 브라우저에서는
+					// XMLHttpRequest객체를 제공합니다.
+					xhr = new XMLHttpRequest();
+				}
+				else {
+					// IE6,IE5 버전에서는 아래와 같이 XMLHttpRequest객체를 생성해야 합니다.
+					xhr = new ActiveXObject("Microsoft.XMLHTTP");
+				}				
+				return xhr;
+			}			
+			
+			// 6.응답처리.
+			function on_ReadyStateChange(){
+				var file = this;
+				// 4=데이터 전송 완료.(0=초기화전,1=로딩중,2=로딩됨,3=대화상태)
+				if(xmlHttp.readyState==4){
+					//200은 에러 없음.(404=페이지가 존재하지 않음)
+					if(xmlHttp.status==200){
+						// 서버에서 받은 값.
+						alert("서버에서 받은 원본 데이터 : "+xmlHttp.responseText);					
+						//7. 데이터 파싱처리.
+						createRooms(xmlHttp.responseText);				
+					}
+					else{
+						alert("처리중 에러가 발생했습니다.");
+					}
+				}
+			}
+      		
+			function createRooms(strInfo){
+				//1. JSON 포멧 문자열을 JavaScript Object로 변경시키기.
+				//var objImageInfo = eval("("+strInfo+")"); 
+				var objSeatInfo = JSON.parse(strInfo);
+				var seats = objSeatInfo.rows;
+				
+				var strDOM = "";
+				for(var i=0;i<seats.length;i++){				
+					var seat =seats[i];
+					
+					var strSeat = "";
+					if(seat.map !=''){//자리배치도 맵이 있다면
+						strSeat = seat.map;
+					};
+
+					strDOM +='<div class="panel panel-default" style="display:inline-block; vertical-align:top;">';	
+					strDOM +='<div class="room panel-body is-clearfix" style="position:relative; display:inline-block; min-width:200px;">';
+					strDOM +='	<div class="title" style="margin-bottom:10px;">'+seat.title+'</div>';
+					strDOM +='	<button class="modify" style="position:absolute; right:15px; top:15px;" data-rowID="'+i+'">수정</button>';
+					strDOM +='	<div class="seat_container show">'+strSeat+'</div>';				
+					strDOM +='</div>';	
+					strDOM +='</div>';		
+				}
+				
+				var $roomContainer = $("#room_container");
+				$roomContainer.html(strDOM);
+				$(".room .modify").on("click", function(e){
+					e.preventDefault();
+					selected_row = $(e.target).attr("data-rowID");
+					var seatData = seats[$(e.target).attr("data-rowID")];
+					//console.log(seatData);
+					select_room(seatData);
+				});
+			}
+
+            function select_room(rowObj){ //선택된 room의 정보를 받아 팝업에 합당한 내용을 뿌려준다.					
+        		$(".map_title").text('열람실 이름 : '+rowObj.title);
+				$(".map_startNumber").text('좌석 시작 번호 : '+rowObj.startNumber);
+				
+				selected_rowData =rowObj;
+				selected_startNumber = rowObj.startNumber;
+
+				if(rowObj.map){
+					//$(".unit_container").html(rowObj.map);
+					get_rows_cols(rowObj.map);
+					updateView(rowObj.map);
+				}else{
+					fn_init_seat();
+				}
+				
+				$(".modal").addClass("is-active");					
+			}				
+			
+      		
+			function get_rows_cols(map){	//map 문자열 정보에서 가로 세로 값 추출하여 행, 열 input value 세팅				
+				var rows = (map.match(/clearfix/g) || []).length;
+				var cols = 0;
+				for(var i=1; i< $(map).length; i++){
+					if($($(map)[i]).hasClass("clearfix")){
+						cols = i;
+						break;
+					}
+				}
+				$('input[name=cols]').val(cols);
+				$('input[name=rows]').val(rows);			
+			}      		
+
+      		function updateView(map_data){//행, 열 input에 있는 value 값으로 unit, control_unit 배치		
+				console.log("map_data : "+map_data);
+				seat_value=[];
+				$(".unit_container").empty();
+				$(".control_unit").remove();
+				selected_rows_unit = [];
+				selected_cols_unit = [];
+		    	colsNum = parseInt($cols.val() || 0, 10);
+		    	rowsNum = parseInt($rows.val() || 0, 10);
+				
+				$(".seat_state").attr("disabled", true);
+				$(".get_seat").attr("disabled", false);
+				$(".set_seat").attr("disabled", true);
+
+		    	
+				for(var i=0; i<rowsNum; i++){
+					var top = (i*30+50)+'px';
+					var left = '0px';
+					$(".unit_wrap").append("<div class='control_unit' data-rows='"+i+"' style='top:"+top+"; left:"+left+";'>"+i+"</div>");
+				}
+				
+				for(var i=0; i<colsNum; i++){
+					var top = '0px';
+					var left = (i*30 +50)+'px';
+					$(".unit_wrap").append("<div class='control_unit' data-cols='"+i+"' style='top:"+top+"; left:"+left+";'>"+i+"</div>");
+				}
+				
+		   		
+				if(map_data != undefined){					
+					for(var i=0; i<rowsNum; i++){
+						for(var j=0; j<colsNum; j++){
+							var new_class = $($(map_data)[(i*colsNum)+j]).attr("class");						
+							var unit = (j === (0))? "<div class='"+new_class+"' data-rows="+i+" data-cols="+j+"><div class='seat_id'></div><div class='seat_host'></div></div>":"<div class='"+new_class+"' data-rows="+i+" data-cols="+j+"><div class='seat_id'></div><div class='seat_host'></div></div>";
+							seat_value.push(unit);
+						}
+					}
+				}else{
+					for(var i=0; i<rowsNum; i++){
+						for(var j=0; j<colsNum; j++){
+							var unit = (j === (0))? "<div class='unit able clearfix' data-rows="+i+" data-cols="+j+"><div class='seat_id'></div><div class='seat_host'></div></div>":"<div class='unit able' data-rows="+i+" data-cols="+j+"><div class='seat_id'></div><div class='seat_host'></div></div>";
+							seat_value.push(unit);
+						}
+					}
+				}
+
+      			$(".unit_container").html(seat_value);
+				$(".control_unit").on("click",function(){
+					$(".seat_state").attr("disabled", false);
+					$(".unit_state").attr("checked", false);
+					$(this).toggleClass("selected");
+					if($(this).data("rows") != undefined){//행 컨트롤 버튼
+						//selected_rows_unit = ($(this).hasClass("selected"))? $(this).data("rows"):-1;
+						if($(this).hasClass("selected")){
+							selected_rows_unit.push($(this).data("rows"));
+						}else{
+							var index = selected_rows_unit.indexOf($(this).data("rows"));
+							selected_rows_unit.splice(index,1);
+						}
+					}
+					
+					if($(this).data("cols") != undefined){//열 컨트롤 버튼
+						//selected_cols_unit = ($(this).hasClass("selected"))? $(this).data("cols"):-1;
+						if($(this).hasClass("selected")){
+							selected_cols_unit.push($(this).data("cols"));
+						}else{
+							var index = selected_cols_unit.indexOf($(this).data("cols"));
+							selected_cols_unit.splice(index,1);
+						}
+					}
+					
+					console.log(selected_rows_unit, selected_cols_unit);
+					select_unit(selected_rows_unit, selected_cols_unit);
+				});
+				$('.unit_state[type="radio"]').on('change', function(e) {
+					//console.log(e.target.value);
+					$(".unit.selected").removeClass("able unable passage");
+					$(".unit.selected").addClass(e.target.value);
+				});
+      			$(".unit_container .unit").on("click",function(){//jqgrid 안에선 동작하지 않게 하려고 unit_wrap으로 감쌈
+	      			//console.log('click');
+	      			
+	      			if($(this).hasClass("able")){
+	      				$(this).removeClass("able");
+	      				$(this).addClass("unable");
+	      			}else if($(this).hasClass("unable")){
+		      			$(this).removeClass("unable");
+	      				$(this).addClass("passage");
+	      			}else if($(this).hasClass("passage")){
+		      			$(this).removeClass("passage");
+	      				$(this).addClass("able");
+	      			}
+	      			
+	      		});
+			};
+			updateView();      		
+
+			function select_unit(rows, cols){
+				//$(".unit[data-rows='"+rows+"'][data-cols='"+cols+"']").addClass("selected");
+				$(".unit").removeClass("selected");
+				var rows_arr_len = rows.length;
+				var cols_arr_len = cols.length;
+				for(var i=0; i<rows_arr_len; i++){					
+					$(".unit[data-rows='"+rows[i]+"']").addClass("selected");
+				}
+				for(var i=0; i<cols_arr_len; i++){					
+					$(".unit[data-cols='"+cols[i]+"']").addClass("selected");
+				}
+				
+			}
+
+			function fn_init_seat(){
+				$('input[name=cols]').val(4);
+      			$('input[name=rows]').val(4);
+				updateView();      			
+			}
+			/*
+      		$(".fix_seat").on("click",function(){
+      			$(".nonpassage").remove();
+      		});
+      		*/
+      		$(".init_seat").on("click", fn_init_seat);
+      		$(".get_seat").on("click", function(){
+      			var num = selected_startNumber;
+      			
+      			var $div = $(".unit_container").find("div"); 
+      			var unit_len = $div.length;
+
+      			for(var i=0; i<unit_len; i++){
+      				if($div.eq(i).hasClass("able")){
+      					var count = num++;
+      					$div.eq(i).attr('id', 'seat'+count);
+      					$div.eq(i).find(".seat_id").html(count);
+      				}
+      				if($div.eq(i).hasClass("unable")){
+      					$div.eq(i).attr('id', null);
+      					$div.eq(i).find(".seat_id").remove();
+      					$div.eq(i).find(".seat_host").remove();
+      				}  
+      				if($div.eq(i).hasClass("passage")){
+      					$div.eq(i).attr('id', null);
+      					$div.eq(i).find(".seat_id").remove();
+      					$div.eq(i).find(".seat_host").remove();
+      				}  
+      							
+      			}
+      			
+				$(".unit_container .unit, .unit_wrap .control_unit").removeClass("selected");
+      			$(".unit_container .unit").off("click");
+				$(".unit_wrap .control_unit").off("click");
+				$(".unit_container .unit").css("cursor","default");
+				$(".unit_wrap .control_unit").css("cursor","default");
+				
+				$(".get_seat").attr("disabled", true);
+				$(".set_seat").attr("disabled", false);
+      			
+				/*
+      			var map = [];
+      			var $div = $(".unit_container").find("div"); 
+      			var unit_len = $div.length;
+      			for(var i=0; i<unit_len; i++){
+      				var obj = [];
+      				obj = $div.eq(i).attr('class').split(' ');
+      				map[i]= obj;
+      			}
+      			console.log(map);
+      			*/      			
+      		});
+      		$(".set_seat").on("click",function(){
+				$(".unit_container .unit").removeAttr("style data-rows data-cols");
+				alert($(".unit_container").html());
+      			selected_rowData.map = $(".unit_container").html();
+      			$('#jqGrid').jqGrid('setRowData', selected_row, selected_rowData);
+				$(this).attr("disabled", true);
+				$(".modal").removeClass("is-active");
+      		});
+      		$('fieldset.room_size').on('input', 'input', function() {
+				updateView();
+		    	return false;
+			});      		
+			
+      	});
+		$("#getData").click(function(){
+          var data = $('#jqGrid').getRowData();
+          console.log(data);
+          var myJsonString = JSON.stringify(data);
+           //console.log(myJsonString);
+          //console.log(JSON.parse(myJsonString));
+        });
+       
+    </script>    
+</body>
+</html>

@@ -450,7 +450,7 @@
       			selected_rowData.map = $(".unit_container").html();
       			//$('#jqGrid').jqGrid('setRowData', selected_row, selected_rowData);
       			var modify_target = "[data-rowID="+selected_row+"]";
-      			$(modify_target).next().empty().html(selected_rowData.map);
+      			$(".modify"+modify_target).next().empty().html(selected_rowData.map);
 				$(this).attr("disabled", true);
 				$(".modal").removeClass("is-active");
       		});

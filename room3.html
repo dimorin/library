@@ -37,6 +37,7 @@
 		label{font-weight:normal;}
     	.map_setting{padding:10px; border-radius:3px;}		
 		button[disabled]{opacity:0.5;}
+		.panel{margin:10px;}
 
 		.modal{bottom: 0; left: 0; position: absolute; right: 0; top: 0; -webkit-box-align: center; -ms-flex-align: center; align-items: center;
     display: none; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; overflow: hidden; position: fixed;  z-index: 20;}
@@ -92,14 +93,6 @@
     </style>
 </head>
 <body>
-	<div style="position:fixed; right:0; top:50px; width:250px; padding:5px; border-radius:3px; background:yellow;">
-		<h4>수정할 거</h4>
-		<ol>
-			<li>자리배치 수정후 테이블에 적용</li>
-			<li>새로만들기</li>
-			<li>json add modify delete 구현</li>
-		</ol>
-	</div>
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -149,9 +142,9 @@
 		</div><!-- end. modal-content-->
 		<button class="modal-close"></button>
 	</div><!-- end.modal -->
-			
+	<!--		
 	<button id="getData" class="btn btn-default">GET DATA</button>	
-    
+    -->
     <script type="text/javascript">
       	$(document).ready(function () {
       		var selected_row;
@@ -226,20 +219,27 @@
 					};
 
 					strDOM +='<div class="panel panel-default" style="display:inline-block; vertical-align:top;">';	
-					strDOM +='<div class="room panel-body is-clearfix" style="position:relative; display:inline-block; min-width:200px;">';
+					strDOM +='<div class="room panel-body is-clearfix" style="position:relative; display:inline-block; min-width:300px;">';
 					strDOM +='	<div class="title" style="margin-bottom:10px;">'+seat.title+'</div>';
+					strDOM +='	<button class="delete" style="position:absolute; right:70px; top:15px;" data-rowID="'+i+'">삭제</button>';
 					strDOM +='	<button class="modify" style="position:absolute; right:15px; top:15px;" data-rowID="'+i+'">수정</button>';
 					strDOM +='	<div class="seat_container show">'+strSeat+'</div>';				
 					strDOM +='</div>';	
 					strDOM +='</div>';		
 				}
 				
+				strDOM +='<div class="panel panel-default" style="display:inline-block; vertical-align:top;">';	
+				strDOM +='<div class="room panel-body is-clearfix" style="position:relative; display:inline-block; min-width:200px;">';
+				strDOM +='	<button class="add" style="">새로만들기</button>';
+				strDOM +='</div>';	
+				strDOM +='</div>';
+
 				var $roomContainer = $("#room_container");
 				$roomContainer.html(strDOM);
 				$(".room .modify").on("click", function(e){
 					e.preventDefault();
 					selected_row = $(e.target).attr("data-rowID");
-					var seatData = seats[$(e.target).attr("data-rowID")];
+					var seatData = seats[selected_row];
 					//console.log(seatData);
 					select_room(seatData);
 				});
@@ -446,12 +446,15 @@
       		});
       		$(".set_seat").on("click",function(){
 				$(".unit_container .unit").removeAttr("style data-rows data-cols");
-				alert($(".unit_container").html());
+				//alert($(".unit_container").html());
       			selected_rowData.map = $(".unit_container").html();
-      			$('#jqGrid').jqGrid('setRowData', selected_row, selected_rowData);
+      			//$('#jqGrid').jqGrid('setRowData', selected_row, selected_rowData);
+      			var modify_target = "[data-rowID="+selected_row+"]";
+      			$(modify_target).next().empty().html(selected_rowData.map);
 				$(this).attr("disabled", true);
 				$(".modal").removeClass("is-active");
       		});
+
       		$('fieldset.room_size').on('input', 'input', function() {
 				updateView();
 		    	return false;

@@ -7,8 +7,9 @@
     <title>아라기연</title>
     <link rel="stylesheet" type="text/css" href="css/reset.css" />
     <style>
-        html, body{width:100%; height:100%;}
+        html, body{width:100%; height:100%; background:#ccc;}
         li{display:inline-block; margin:0 5px; line-height:48px; color:white; font-size:16px;}
+        li a{display:block; color:white; font-size:16px;}
         .link_step7{display:block; position:absolute; top:50%; left:50%; width:1318px; height:760px; background:url(img/step7.png) no-repeat; -webkit-transform: translateX(-50%) translateY(-50%);
         -moz-transform: translateX(-50%) translateY(-50%);
         -ms-transform: translateX(-50%) translateY(-50%);
@@ -27,9 +28,14 @@
                 <li>시스템관리</li>
                 <li>환경설정</li>
             </ul>
+            <ul style="position:absolute; display:inline-block; left:30px; top:0;">
+                <li><a href="login.html">로그인</a></li>
+                <li><a href="dashboard.html">대쉬보드</a></li>
+                <li><a href="step1.html">초기화</a></li>
+            </ul>
         </div>
     </div>
-    <div class="back" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.3);"></div>    
+    
     <div class="link_step7">
         
         <a href="step8.html" title="배치도완료" style="position:absolute; left:566px; top:728px; display:block; width:160px; height:38px;"></a>    
